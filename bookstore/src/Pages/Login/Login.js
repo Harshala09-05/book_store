@@ -40,8 +40,15 @@ export default function Login() {
     if (emailTest && passwordTest) {
       try {
         let response = await userLogin(data);
-        localStorage.setItem("token", response.data.id);
-        navigate("/dashboard");
+        console.log(response.data.result)
+        if (response?.data?.result?.accessToken){
+         localStorage.setItem("token", response.data.result.accessToken)
+          navigate("/dashboard");
+        }
+        else {
+          console.log('Invalid')
+        }
+        
       } catch (err) {
         toast.error("Invalid credentials");
       }

@@ -1,22 +1,30 @@
 // Dashboard.js
 import React from "react";
-import { useState,useEffect } from "react";
+import { useState,useEffect,createContext } from "react";
 import { Box, Typography, Select, MenuItem } from "@mui/material";
 import BookCard from "../../Component/BookCard";
 import NavBar from "../../Component/NavBar";
 import { getBooks } from "../../Services/admin_service";
-
+import { Navigate, useNavigate } from 'react-router-dom';
+import DataProvider from '../../Context/DataProvider';
 const Dashboard = () => {
   const [books, setBooks] = useState({
-    bookName: "",
-    author: "",
-    description: "",
+      bookName: "",
+   author: "",
+  description: "",
     quantity: "",
-    price: '',
+  price: '',
     discountPrice: ''
   });
 
-
+  const navigate = useNavigate();
+  const handleCardClick = (id) => {
+    console.log("called",id);
+    
+    // navigate(`/bookDetails`)
+    navigate(`/bookDetails/${id}`)
+    // return <Navigate to="/bookDetails" replace={true} />
+  }
   useEffect(() => {
     getAllBooks()
     console.log('books',books);
@@ -46,9 +54,13 @@ const Dashboard = () => {
               <Typography
                 variant="h5"
                 component="div"
-                sx={{ marginBottom: "20px" }}
+                // sx={{ marginBottom: "20px" }}
+                sx={{fontSize:25,display:'flex',alignItems:'center'}}
               >
                 Books
+                <Typography variant="body1" color="initial" sx={{fontSize:12,color:'#9D9D9D'}}>
+              ({books.length} items)
+            </Typography>
               </Typography>
               <Select
                 value="relevance"
@@ -72,7 +84,7 @@ const Dashboard = () => {
               {books.length > 0 ? (
                 books.map(book => (
                   // <BookCard key={book.id} book={book} />
-                  <BookCard key={book.id} books={book} setBooks={setBooks} getAllBooks={ getAllBooks} />
+                  <BookCard key={book.id} handleCardClick={handleCardClick} books={book} setBooks={setBooks} getAllBooks={ getAllBooks} />
              
                 ))
               ) : (

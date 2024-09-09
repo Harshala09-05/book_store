@@ -4,12 +4,19 @@ import { Box, Typography } from '@mui/material';
 import OnlineShoppingImage from '../../Assets/OnlineShopping.png';
 import Login from './Login';
 import SignUp from './SignUp';
+import { Link, useLocation } from 'react-router-dom';
 
 
 
 export default function LeftCard({changePage}) {
   // State to manage the current page (login or signup)
   const [page, setPage] = useState('login');
+
+  const location = useLocation();
+
+  // Determine the current page based on the URL path
+  const isLoginPage = location.pathname === '/' || location.pathname === '/signin';
+  const isSignUpPage = location.pathname === '/signup';
 
   // Event handlers for switching pages
   const handleLoginClick = () => setPage('login');
@@ -30,22 +37,30 @@ export default function LeftCard({changePage}) {
             {/* Login and SignUp text with click handlers */}
             <Typography 
               variant='h5' 
-              color={page === 'login' ? 'textPrimary' : 'textSecondary'} 
-              onClick={handleLoginClick} 
+              // color={page === 'login' ? 'textPrimary' : 'textSecondary'}
+              color={ isLoginPage ? 'textPrimary' : 'textSecondary'}
+              // onClick={handleLoginClick} 
+              component={Link}
+              to='/'
               sx={{ cursor: 'pointer' }}>
               Login
             </Typography>
             <Typography 
               variant='h5' 
-              color={page === 'signup' ? 'textPrimary' : 'textSecondary'} 
-              onClick={handleSignUpClick} 
+              // color={page === 'signup' ? 'textPrimary' : 'textSecondary'} 
+              color={isSignUpPage ? 'textPrimary' : 'textSecondary'} 
+              // onClick={handleSignUpClick} 
+              component={Link}
+              to='/signup'
               sx={{ cursor: 'pointer' }}>
               SignUp
             </Typography>
           </Box>
 
           {/* Conditional rendering based on the state */}
-          {page === 'login' ? <Login setPage={setPage} /> : <SignUp setPage={setPage}/>}
+          {/* {page === 'login' ? <Login setPage={setPage} /> : <SignUp setPage={setPage} />} */}
+          {isLoginPage && <Login setPage={setPage}/>}
+          {isSignUpPage && <SignUp setPage={setPage}/>}
         </Paper>
       </Box>
     </Box>

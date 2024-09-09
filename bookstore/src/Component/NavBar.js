@@ -1,11 +1,13 @@
 // Navbar.js
-import React from 'react';
+import React, { createContext } from 'react';
 import { AppBar, Toolbar, Typography, InputBase, IconButton, Badge } from '@mui/material';
 import { AccountCircle, ShoppingCart } from '@mui/icons-material';
 import logoImage from '../Assets/logo.jpg'
 import { styled, alpha } from '@mui/material/styles';
 import SearchIcon from '@mui/icons-material/Search';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
+import DataProvider from '../Context/DataProvider';
+import {useSelector} from 'react-redux'
 
 
 
@@ -49,6 +51,8 @@ const Search = styled('div')(({ theme }) => ({
     },
   }));
 const Navbar = () => {
+  // const {cartCount} = createContext(DataProvider)
+  const cartCount = useSelector((state) => state.cartCount);
   return (
     <AppBar position="static" >
       <Toolbar sx={{backgroundColor:'#800000'}}>
@@ -74,7 +78,7 @@ const Navbar = () => {
           <PersonOutlineOutlinedIcon />
         </IconButton>
         <IconButton color="inherit" sx={{marginLeft:'3vw'}}>
-          <Badge badgeContent={4} color="secondary">
+          <Badge badgeContent={cartCount} color="secondary">
             <ShoppingCart />
           </Badge>
         </IconButton>

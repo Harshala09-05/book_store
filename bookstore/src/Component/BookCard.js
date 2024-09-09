@@ -3,11 +3,16 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import { CardMedia, Typography, Rating, Button, CardActions } from '@mui/material';
 import Book from '../Assets/Book.png';
+import { useNavigate } from 'react-router-dom';
 import StarIcon from '@mui/icons-material/Star';
-import DataProvider from '../Contex/DataProvider';
+import DataProvider from '../Context/DataProvider';
 
 
-export default function BookCard({books,setBooks,getAllBooks}) {
+export default function BookCard({ books, setBooks, getAllBooks,handleCardClick }) {
+  // const navigate = useNavigate();
+  // const handleCardClick = () => {
+  //   navigate(`/bookDetails/${books.id}`)
+  // }
   // const { books, setBooks } = createContext(DataProvider);
   // const [books, setBooks] = useState({
   //   bookName: "",
@@ -17,12 +22,12 @@ export default function BookCard({books,setBooks,getAllBooks}) {
   //   price: '',
   //   discountPrice: ''
   // });
-  debugger
+
   console.log('hellooo ',books);
   console.log(books.bookName);
   
     return (
-        <Card sx={{  marginLeft:'2vw',width: '15vw',height:'40vh',marginTop:'10vh'}}>
+        <Card onClick={()=>handleCardClick(books._id)} sx={{  marginLeft:'2vw',width: '15vw',height:'40vh',marginTop:'10vh'}}>
         <CardMedia
           component="img"
           alt='book'

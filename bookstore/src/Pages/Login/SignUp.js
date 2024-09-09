@@ -64,8 +64,9 @@ export default function SignUp() {
     if (emailTest && passwordTest && phoneTest) {
       try {
         let response = await userSignUp(data);
-        console.log(response.data);
-        navigate('/signin');
+        console.log(data)
+        console.log(response.data.result);
+        navigate('/');
       } catch (err) {
         toast.error('User already exists');
       }
