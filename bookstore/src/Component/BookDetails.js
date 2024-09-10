@@ -16,6 +16,7 @@ import { useLocation } from "react-router-dom";
 // import DataProvider from "../Context/DataProvider";
 import QuantityNo from "./QuantityNo";
 
+
 function BookDetails() {
   const { id } = useParams();
 
@@ -125,6 +126,7 @@ function BookDetails() {
                     setCartItem={setCartItem}
                     id={id}
                     fetchbooksDetails={fetchbooksDetails}
+                    // quantityToBuy ={quantityToBuy}
                   />
                 </Box>
               )}

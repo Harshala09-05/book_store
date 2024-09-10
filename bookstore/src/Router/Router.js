@@ -7,6 +7,7 @@ import DashBoard from '../Pages/DashBoard/DashBoard';
 import BookDetails from '../Component/BookDetails';
 import ProtectedRoute from './ProtectedRoute';
 import AuthRoute from './AuthRoute';
+import MyCart from '../Component/MyCart';
 
 export default function Router() {
     const [page, setPage] = useState(false);
@@ -18,7 +19,9 @@ export default function Router() {
         <Route path="/signup" element={<AuthRoute><LeftCard page={page} setPage={setPage}/></AuthRoute>} />
         {/* <Route path="/signin" element={<LeftCard page={page} setPage={setPage} />} /> */}
         <Route path="/dashboard" element={<ProtectedRoute><DashBoard/></ProtectedRoute>} />
-        <Route path="/bookDetails/:id" element={<BookDetails/>} />
+        <Route path="/bookDetails/:id" element={<BookDetails />} />
+        <Route path="/cart" element={<MyCart/>} />
+        
         
         </Routes>
     </BrowserRouter>

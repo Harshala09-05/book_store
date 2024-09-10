@@ -89,9 +89,9 @@ export const modifyCartItem = async (id, data) => {
 export const removeCartItem = async (id, data) => {
   console.log(id);
   let response = await axios.delete(
-    `https://bookstore.incubation.bridgelabz.com/bookstore_user/remove_cart_item/${id}`,
+    `https://bookstore.incubation.bridgelabz.com/bookstore_user/remove_cart_item/${id}`,data,
     getXAccessToken()
-    ()
+ 
   );
   console.log(response)
   return response;

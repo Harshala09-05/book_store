@@ -1,83 +1,91 @@
-// Navbar.js
-import React, { createContext } from 'react';
-import { AppBar, Toolbar, Typography, InputBase, IconButton, Badge } from '@mui/material';
+import React, { useState } from 'react';
+import { AppBar, Toolbar, Typography, InputBase, IconButton, Badge, Popover, Box } from '@mui/material';
 import { AccountCircle, ShoppingCart } from '@mui/icons-material';
-import logoImage from '../Assets/logo.jpg'
+import logoImage from '../Assets/logo.jpg';
 import { styled, alpha } from '@mui/material/styles';
 import SearchIcon from '@mui/icons-material/Search';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
-import DataProvider from '../Context/DataProvider';
-import {useSelector} from 'react-redux'
-
-
-
-
+import { Navigate, useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import MyCart from '../Component/MyCart' // Make sure the path is correct
 
 const Search = styled('div')(({ theme }) => ({
-    position: 'relative',
-    borderRadius: theme.shape.borderRadius,
-    backgroundColor: 'white',
-    marginRight: theme.spacing(2),
-    marginLeft: 0,
-    width: '90vw',
-    [theme.breakpoints.up('sm')]: {
-      marginLeft: theme.spacing(3),
-        
-      backgroundColor:'white'
+  position: 'relative',
+  borderRadius: theme.shape.borderRadius,
+  backgroundColor: 'white',
+  marginRight: theme.spacing(2),
+  marginLeft: 0,
+  width: '90vw',
+  [theme.breakpoints.up('sm')]: {
+    marginLeft: theme.spacing(3),
+    backgroundColor: 'white'
+  },
+}));
+
+const SearchIconWrapper = styled('div')(({ theme }) => ({
+  padding: theme.spacing(0, 2),
+  height: '100%',
+  position: 'absolute',
+  pointerEvents: 'none',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+}));
+
+const StyledInputBase = styled(InputBase)(({ theme }) => ({
+  color: 'inherit',
+  '& .MuiInputBase-input': {
+    padding: theme.spacing(1, 1, 1, 0),
+    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+    transition: theme.transitions.create('width'),
+    width: '100%',
+    [theme.breakpoints.up('md')]: {
+      width: '35vw',
     },
-  }));
-  
-  const SearchIconWrapper = styled('div')(({ theme }) => ({
-    padding: theme.spacing(0, 2),
-    height: '100%',
-    position: 'absolute',
-    pointerEvents: 'none',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  }));
-  
-  const StyledInputBase = styled(InputBase)(({ theme }) => ({
-    color: 'inherit',
-    '& .MuiInputBase-input': {
-      padding: theme.spacing(1, 1, 1, 0),
-      // vertical padding + font size from searchIcon
-      paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-      transition: theme.transitions.create('width'),
-      width: '100%',
-      [theme.breakpoints.up('md')]: {
-        width: '35vw',
-      },
-    },
-  }));
+  },
+}));
+
 const Navbar = () => {
-  // const {cartCount} = createContext(DataProvider)
+  const navigate = useNavigate();
+  const [anchorEl, setAnchorEl] = useState(null);
   const cartCount = useSelector((state) => state.cartCount);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+    navigate(`/cart`)
+    
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const open = Boolean(anchorEl);
+  const id = open ? 'simple-popover' : undefined;
+
   return (
-    <AppBar position="static" >
-      <Toolbar sx={{backgroundColor:'#800000'}}>
-        <Typography variant="h6" sx={{ marginLeft:'10vw' }}>
-          <img src={logoImage} alt="Bookstore" style={{ width: '30px', marginRight: '10px',marginTop:'10px' }} />
+    <AppBar position="static">
+      <Toolbar sx={{ backgroundColor: '#800000' }}>
+        <Typography variant="h6" sx={{ marginLeft: '10vw' }}>
+          <img src={logoImage} alt="Bookstore" style={{ width: '30px', marginRight: '10px', marginTop: '10px' }} />
           Bookstore
         </Typography>
-        <div style={{ display:'flex',justifyContent:'start', position: 'relative', marginRight: '20vw', marginLeft: '40px', width: '300px' }}>
-          
-                  <Search sx={{ display: { xs: "none", sm: "flex",marginRight:'5vw' } }}>
-                <SearchIconWrapper>
-                  <SearchIcon sx={{ color: "#9D9D9D" }} />
-                </SearchIconWrapper>
-                <StyledInputBase
-                  placeholder="Search…"
-                  inputProps={{ "aria-label": "search..." }}
-                  sx={{ color: "#9D9D9D" }}
-                />
-              </Search>
-
+        <div style={{ display: 'flex', justifyContent: 'start', position: 'relative', marginRight: '20vw', marginLeft: '40px', width: '300px' }}>
+          <Search sx={{ display: { xs: "none", sm: "flex", marginRight: '5vw' } }}>
+            <SearchIconWrapper>
+              <SearchIcon sx={{ color: "#9D9D9D" }} />
+            </SearchIconWrapper>
+            <StyledInputBase
+              placeholder="Search…"
+              inputProps={{ "aria-label": "search..." }}
+              sx={{ color: "#9D9D9D" }}
+            />
+          </Search>
         </div>
-        <IconButton color="inherit" sx={{marginLeft:'15vw'}} >
+        <IconButton color="inherit" sx={{ marginLeft: '15vw' }}>
           <PersonOutlineOutlinedIcon />
         </IconButton>
-        <IconButton color="inherit" sx={{marginLeft:'3vw'}}>
+        <IconButton color="inherit" sx={{ marginLeft: '3vw' }} onClick={handleClick} >
           <Badge badgeContent={cartCount} color="secondary">
             <ShoppingCart />
           </Badge>
@@ -88,4 +96,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-

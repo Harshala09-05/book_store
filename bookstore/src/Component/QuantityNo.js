@@ -8,7 +8,8 @@ import{useDispatch} from 'react-redux'
 import {DataContext} from '../Context/DataProvider';
 import { addToCart, removeFromCart } from './Reducer/cartActions';
 
-export default function QuantityNo({ cartItem,id, setCartItem, setAddCart, getCartItems, fetchbooksDetails }) {
+export default function QuantityNo(props) {
+  const { cartItem, id, setCartItem, setAddCart, getCartItems, fetchbooksDetails } = props;
   const location = useLocation();
     const [item, setItem] = useState(cartItem);
     const { cartCount, setCartCount, updateCartCount } = createContext(DataContext);
@@ -25,30 +26,43 @@ export default function QuantityNo({ cartItem,id, setCartItem, setAddCart, getCa
       if (!id) {
         throw new Error("Cart item ID is undefined!");
       }
+       debugger
+        if (type === "plus") {
+          console.log(type, item.quantityToBuy);
+          const updatedQuantity = item.quantityToBuy + 1;
+          setItem((prev) => ({
+            ...prev,
+            quantityToBuy: updatedQuantity,
+          }));
+          console.log(updatedQuantity);
+          await modifyCartItem(id, { quantityToBuy: updatedQuantity });
+          fetchbooksDetails(id); // Fetch the book details after modifying the cart
+          dispatch(addToCart(item, id));
 
-      if (type === "plus") {
-        const updatedQuantity = item.quantityToBuy + 1;
-        setItem((prev) => ({
-          ...prev,
-          quantityToBuy: updatedQuantity,
-        }));
-        await modifyCartItem(id, { quantityToBuy: updatedQuantity });
-        // fetchbooksDetails(item._id); // Fetch the book details after modifying the cart
-          dispatch(addToCart(item));
-      } else if (type === "minus") {
-        if (item.quantityToBuy === 1) {
-          setAddCart(false);
-            await removeCartItem(id);
-            dispatch(removeFromCart(id));
-          return getCartItems(); // Refresh cart items after removal
+        } else if (type === "minus") {
+          console.log(type, item.quantityToBuy);
+          debugger
+          // If quantity is 1, remove the item from the cart
+          if (item.quantityToBuy === 1) {
+            setAddCart(false); // Remove item from the frontend cart view
+            await removeCartItem(id); // API call to remove the item from the backend cart
+            dispatch(removeFromCart(id)); // Redux action to update the state by removing the item
+            // return getCartItems(); // Refresh the cart items after removal
+          }
+          else {
+            // If quantity is greater than 1, reduce the quantity
+            const updatedQuantity = item.quantityToBuy - 1;
+            setItem((prev) => ({
+              ...prev,
+              quantityToBuy: updatedQuantity, // Update local state for the item
+            }));
+          
+            await modifyCartItem(id, { quantityToBuy: updatedQuantity }); // API call to update the quantity in the backend
+            dispatch(removeFromCart(id))
+            getCartItems(); // Refresh the cart items after modifying the quantity
+          }
         }
-        const updatedQuantity = item.quantityToBuy - 1;
-        setItem((prev) => ({
-          ...prev,
-          quantityToBuy: updatedQuantity,
-        }));
-        await modifyCartItem(id, { quantityToBuy: updatedQuantity });
-      }
+        
       getCartItems(); // Refresh cart after modification
     } catch (err) {
       console.error("Error updating cart item:", err);
@@ -61,7 +75,7 @@ export default function QuantityNo({ cartItem,id, setCartItem, setAddCart, getCa
         size="small"
         sx={{ backgroundColor: "#FAFAFA", border: "1px solid #DBDBDB" }}
         onClick={() => handleCount("minus")}
-        disabled={item.quantityToBuy === 1 && location.pathname.includes('cart')}
+        disabled={item?.quantityToBuy === 1 && location.pathname.includes('cart')}
       >
         <RemoveIcon fontSize="small" />
       </IconButton>
