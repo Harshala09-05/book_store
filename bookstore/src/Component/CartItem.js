@@ -4,10 +4,20 @@ import Book from "../Assets/Book.png";
 import QuantityNo from "../Component/QuantityNo";
 import { removeCartItem, deleteWishList } from "../Services/admin_service";
 import DeleteIcon from "@mui/icons-material/Delete";
+import BookDetails from "./BookDetails";
 
-export default function CartItem() {
+export default function CartItem(props) {
+  const { booksDetails, addToCart, getAllBooks, getBooks,cartItem,getCartItems } = props
+  console.log("cartItems", cartItem);
+  console.log('BookDetails', booksDetails);
+ 
+  // const filterBooks = cartItem.filter((item) => item.length > 0);
+  
+
+  // const bookName = cartItem?.bookName || "Unknown Book";
   return (
     <Box container sx={{ my: 1, justifyContent: "space-between" }}>
+      
       <Box item sx={{ display: "flex", alignItems: "flex-start" }} xs={12}>
         <Box item>
           <img
@@ -22,7 +32,8 @@ export default function CartItem() {
               variant="h6"
               color="initial"
               sx={{ fontWeight: "bold", lineHeight: 1, display: "flex" }}
-            ></Typography>
+            >{cartItem.product_id.bookName}</Typography>
+            
             <Typography
               variant="body1"
               color="initial"
@@ -32,7 +43,7 @@ export default function CartItem() {
                 marginTop: 2,
                 marginBottom: 1,
               }}
-            ></Typography>
+            >{cartItem.product_id.author}</Typography>
 
             <Typography
               variant="body1"
@@ -45,7 +56,7 @@ export default function CartItem() {
                 fontWeight: "bold",
               }}
             >
-              Rs. {1500}
+              Rs. {cartItem.product_id.discountPrice}
               <Typography
                 sx={{
                   fontSize: 12,
@@ -54,7 +65,7 @@ export default function CartItem() {
                   mx: 2,
                 }}
               >
-                Rs.{300}
+                Rs.{cartItem.product_id.price}
               </Typography>
             </Typography>
 
@@ -70,17 +81,8 @@ export default function CartItem() {
                 flexWrap: "nowrap",
               }}
             >
-              Rs. {500 * 2000}
-              <Typography
-                sx={{
-                  fontSize: 12,
-                  textDecoration: "line-through",
-                  color: "#9D9D9D",
-                  mx: 2,
-                }}
-              >
-                Rs.{500 * 2000}
-              </Typography>
+              Rs. {cartItem.product_id.discountPrice * cartItem.quantityToBuy}
+             
             </Typography>
           </Box>
 
@@ -93,17 +95,18 @@ export default function CartItem() {
               flexWrap: "nowrap",
             }}
           >
-            {/* <QuantityNo /> */}
+            <QuantityNo cartItem={cartItem} id={cartItem._id} />
             <Typography
               variant="body1"
               color="initial"
               sx={{ mx: { xs: 1, sm: 2 }, cursor: "pointer" }}
             >
               Remove
-            </Typography>
+              </Typography>
+              
           </Box>
         </Box>
-      </Box>
+        </Box>
     </Box>
   );
 }

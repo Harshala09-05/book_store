@@ -51,7 +51,7 @@ function BookDetails() {
 
   return (
     <>
-      <Navbar />
+      {/* <Navbar /> */}
       <Box>
         <Box sx={{ height: "8vh", marginLeft: "13vw", paddingTop: "3vh" }}>
           <Breadcrumbs aria-label="breadcrumb">
@@ -125,7 +125,7 @@ function BookDetails() {
                     getCartItems={getCartItems}
                     setCartItem={setCartItem}
                     id={id}
-                    fetchbooksDetails={fetchbooksDetails}
+                    // fetchbooksDetails={fetchbooksDetails}
                     // quantityToBuy ={quantityToBuy}
                   />
                 </Box>

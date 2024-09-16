@@ -11,19 +11,31 @@ import MyCart from '../Component/MyCart';
 
 export default function Router() {
     const [page, setPage] = useState(false);
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route path='/' element={<AuthRoute><LeftCard/></AuthRoute>}/>
-        {/* <Route path="/" element={<AuthRoute><LeftCard/></AuthRoute>} /> */}
-        <Route path="/signup" element={<AuthRoute><LeftCard page={page} setPage={setPage}/></AuthRoute>} />
-        {/* <Route path="/signin" element={<LeftCard page={page} setPage={setPage} />} /> */}
-        <Route path="/dashboard" element={<ProtectedRoute><DashBoard/></ProtectedRoute>} />
-        <Route path="/bookDetails/:id" element={<BookDetails />} />
-        <Route path="/cart" element={<MyCart/>} />
-        
-        
-        </Routes>
-    </BrowserRouter>
-  )
+
+    return (
+        <BrowserRouter>
+            <Routes>
+                <Route path="/" element={<AuthRoute><LeftCard /></AuthRoute>} />
+                <Route path="/signup" element={<AuthRoute><LeftCard page={page} setPage={setPage} /></AuthRoute>} />
+                <Route path="/login" element={<AuthRoute><LeftCard page={page} setPage={setPage} /></AuthRoute>} />
+                <Route path="/dashboard" element={<ProtectedRoute><DashBoard /></ProtectedRoute>} >
+                    
+                    <Route path="bookDetails/:id" element={<BookDetails />} />
+                    <Route path="cart" element={<MyCart />} />
+                </Route>
+                
+
+                  {/* <Route path="/dashboard" element={<DashBoard />}>sss
+                      </Route> */}
+                   
+               
+                    {/* <Route path="bookDetails/:id" element={<ProtectedRoute><BookDetails /></ProtectedRoute>} />
+                    <Route path="cart" element={<MyCart />} /> */}
+                {/* </Route> */}
+                {/* <Route path="bookDetails/:id" element={<ProtectedRoute><BookDetails /></ProtectedRoute>} */}
+                     {/* <Route path="bookDetails/:id" element={<BookDetails />}/> */}
+                    {/* <Route path="cart" element={<MyCart />} /> */}
+            </Routes>
+        </BrowserRouter>
+    );
 }

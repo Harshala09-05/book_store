@@ -45,14 +45,14 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-const Navbar = () => {
+const Navbar = ({cartItems}) => {
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
   const cartCount = useSelector((state) => state.cartCount);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
-    navigate(`/cart`)
+    navigate(`/dashboard/cart`)
     
   };
 
@@ -86,7 +86,7 @@ const Navbar = () => {
           <PersonOutlineOutlinedIcon />
         </IconButton>
         <IconButton color="inherit" sx={{ marginLeft: '3vw' }} onClick={handleClick} >
-          <Badge badgeContent={cartCount} color="secondary">
+          <Badge badgeContent={cartItems?.length} color="secondary">
             <ShoppingCart />
           </Badge>
         </IconButton>

@@ -65,10 +65,12 @@ export default function QuantityNo(props) {
         
       getCartItems(); // Refresh cart after modification
     } catch (err) {
+    
       console.error("Error updating cart item:", err);
     }
   };
 
+  
   return (
     <Box sx={{ display: 'flex', alignItems: 'center' }}>
       <IconButton
