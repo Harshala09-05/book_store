@@ -7,7 +7,9 @@ import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
 const Dashboard = () => {
   const [books, setBooks] = useState([]);
+  const [filteredBooks, setFilteredBooks] = useState([]);
   const [cartItems, setCartItems] = useState();
+  const [searchBook, setSearchBook] = useState('');
   const location = useLocation(); // To check the current route
   const navigate = useNavigate();
 
@@ -26,6 +28,7 @@ const Dashboard = () => {
   const getAllBooks = async () => {
     let response = await getBooks();
     setBooks(response.data.result);
+    setFilteredBooks(response.data.result);
     console.log("books--------------------->", response.data.result);
   };
 
@@ -34,10 +37,40 @@ const Dashboard = () => {
     console.log("cartItems in dashboard", response.data.result);
     setCartItems(response.data.result);
   };
+  const handleSearch = (searchBook) => {
+    let filtered;
+    setSearchBook(searchBook);
+    if (searchBook === '') {
+      // setFilteredBooks(books);
+      getAllBooks()
+      console.log(books);
+    } else {
+      const filtered = books?.filter((book) =>
+        
+        book.bookName?.toLowerCase().includes(searchBook.toLowerCase()));
+    
+      // setFilteredBooks(filtered);
+      setBooks(filtered);
+      console.log(filtered);
+    }
+  }
+    // }
+    // if (searchBook !== '') {
+    //   let filtered = books.filter(book =>
+    //     book.bookName.toLowerCase().includes(searchBook.toLowerCase()) ||
+    //     book.author.toLowerCase().includes(searchBook.toLowerCase())
+    //   );
+    // }
+
+    // Update state with the filtered notes
+  //   setFilteredBooks(filtered);
+  //   console.log("Data", filtered);
+  // }
+
 
   return (
     <>
-      <NavBar cartItems={cartItems} />
+      <NavBar cartItems={cartItems} onSearch={handleSearch} />
       <div>
         <Box sx={{ width: '100%', alignItems: 'center', justifyContent: 'center' }}>
           <Box sx={{ width: '100%', alignItems: 'center', justifyContent: 'center' }}>
@@ -66,7 +99,7 @@ const Dashboard = () => {
                   <Select
                     value="relevance"
                     displayEmpty
-                    sx={{ marginBottom: "20px", width: "200px", height: '25px' }}
+                    sx={{ marginBottom: "20px", width: { xs: "100%", md: "200px" }, height: '25px' }}
                   >
                     <MenuItem value="relevance">Sort by relevance</MenuItem>
                     <MenuItem value="price">Price: Low to High</MenuItem>
@@ -75,10 +108,15 @@ const Dashboard = () => {
                 </Box>
 
                 <Box sx={{
-                  marginLeft: '5vw',
-                  display: "grid",
-                  gridTemplateColumns: 'repeat(4, 1fr)', // 4 cards per row
-                  gap: 2
+                   marginLeft: { xs: 0, md: "5vw" }, // No margin on small screens
+                   display: "grid",
+                   gridTemplateColumns: {
+                     xs: "repeat(1, 1fr)", // 1 card per row on mobile
+                     sm: "repeat(2, 1fr)", // 2 cards per row on tablet
+                     md: "repeat(4, 1fr)", // 4 cards per row on larger screens
+                   },
+                   gap: 2,
+                   padding: { xs: 1, md: 2 }, // Padding for mobile and desktop
                 }}>
                   {books.length > 0 ? (
                     books.map((book) => (

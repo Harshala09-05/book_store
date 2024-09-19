@@ -27,7 +27,11 @@ export default function BookCard({ books, setBooks, getAllBooks,handleCardClick 
   console.log(books.bookName);
   
     return (
-        <Card onClick={()=>handleCardClick(books._id)} sx={{  marginLeft:'2vw',width: '15vw',height:'40vh',marginTop:'10vh'}}>
+      <Card onClick={() => handleCardClick(books._id)} sx={{
+        marginLeft: '2vw', width: { xs: '80vw', sm: '40vw', md: '20vw', lg: '15vw' }, // Responsive width for different screens
+        height: { xs: 'auto', sm: '45vh', md: '40vh' }, // Adjust height based on screen size,
+        marginTop: '10vh'
+      }}>
         <CardMedia
           component="img"
           alt='book'
@@ -38,15 +42,15 @@ export default function BookCard({ books, setBooks, getAllBooks,handleCardClick 
           }}
         />
         <CardContent >
-          <Typography variant="body1" component="div">
+          <Typography variant="body1" component="div" sx={{display:'flex',alignItems:'flex-start'}}>
             {books.bookName}
           </Typography>
-          <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+          <Typography variant="body2" sx={{ color: 'text.secondary',display:'flex',alignItems:'flex-start' }}>
             by {books.author}
           </Typography >
           {/* <Rating value='4.5' readOnly /> */}
-          <Typography variant="span" color="text.secondary" component="div" sx={{display:'flex',alignItems:'flex-start'}}>
-                    <span className='rating'>
+          <Typography variant="span" color="text.secondary" component="div" sx={{display:'flex',alignItems:'flex-start',marginBottom:'5px'}}>
+                    <span className='rating' style={{ backgroundColor: 'green',color:'white' }} >
                         4.5
                         <StarIcon fontSize='sm'/>
                     </span>
@@ -56,8 +60,9 @@ export default function BookCard({ books, setBooks, getAllBooks,handleCardClick 
                 </Typography>
 
           <Typography variant="h6" component="div" sx={{fontWeight:'bold',
-                           fontSize:'14px'}}>
-            {books.price} <span style={{ textDecoration: 'line-through', fontSize: '10px' }}>{books.discountPrice }</span>
+                           fontSize: { xs: '12px', md: '14px' },display:'flex',alignItems:'flex-start'}}>
+            Rs.{books.discountPrice}
+            <span style={{ textDecoration: 'line-through', fontSize: { xs: '10px', md: '12px' } }}>Rs.{books.price}</span>
           </Typography>
         </CardContent>
         

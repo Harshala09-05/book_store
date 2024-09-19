@@ -7,6 +7,7 @@ import BookDetails from './Component/BookDetails';
 import Router from './Router/Router';
 import { Provider } from 'react-redux';
 import store from './Component/Reducer/Store'
+import OrderSuccessful from './Component/OrderSuccessful'
 
 
 function App() {
@@ -17,9 +18,11 @@ function App() {
       <Provider store= { store }>
       <Router/>
       </Provider>
+      
         
       {/* </DataContext> */}
       {/* <BookDetails/> */}
+      {/* <OrderSuccessful/> */}
     </div>
   );
 }

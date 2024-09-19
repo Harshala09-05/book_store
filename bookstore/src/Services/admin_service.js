@@ -88,10 +88,22 @@ export const modifyCartItem = async (id, data) => {
 
 export const removeCartItem = async (id, data) => {
   console.log(id);
+  debugger
   let response = await axios.delete(
-    `https://bookstore.incubation.bridgelabz.com/bookstore_user/remove_cart_item/${id}`,data,
+    `https://bookstore.incubation.bridgelabz.com/bookstore_user/remove_cart_item/${id}`,
     getXAccessToken()
  
+  );
+  console.log(response)
+  return response;
+};
+
+export const updateUser = async (data) => {
+  debugger
+  let response = await axios.put(
+    `https://bookstore.incubation.bridgelabz.com/bookstore_user/edit_user`,
+    data,
+    getXAccessToken()
   );
   console.log(response)
   return response;

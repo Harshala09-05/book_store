@@ -8,6 +8,7 @@ import BookDetails from '../Component/BookDetails';
 import ProtectedRoute from './ProtectedRoute';
 import AuthRoute from './AuthRoute';
 import MyCart from '../Component/MyCart';
+import OrderSuccessful from '../Component/OrderSuccessful';
 
 export default function Router() {
     const [page, setPage] = useState(false);
@@ -23,7 +24,7 @@ export default function Router() {
                     <Route path="bookDetails/:id" element={<BookDetails />} />
                     <Route path="cart" element={<MyCart />} />
                 </Route>
-                
+                <Route path='/successful' element={<OrderSuccessful/>}/>
 
                   {/* <Route path="/dashboard" element={<DashBoard />}>sss
                       </Route> */}

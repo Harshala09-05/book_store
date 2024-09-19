@@ -34,9 +34,9 @@ export default function QuantityNo(props) {
             ...prev,
             quantityToBuy: updatedQuantity,
           }));
-          console.log(updatedQuantity);
+          console.log(updatedQuantity, item);
           await modifyCartItem(id, { quantityToBuy: updatedQuantity });
-          fetchbooksDetails(id); // Fetch the book details after modifying the cart
+          fetchbooksDetails(); // Fetch the book details after modifying the car
           dispatch(addToCart(item, id));
 
         } else if (type === "minus") {

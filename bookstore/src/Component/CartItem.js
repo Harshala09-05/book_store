@@ -7,9 +7,20 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import BookDetails from "./BookDetails";
 
 export default function CartItem(props) {
-  const { booksDetails, addToCart, getAllBooks, getBooks,cartItem,getCartItems } = props
+  const { booksDetails,onRemove, addToCart, getAllBooks, getBooks,cartItem,getCartItems,showQuantity,isOrderSummary } = props
   console.log("cartItems", cartItem);
   console.log('BookDetails', booksDetails);
+  console.log(cartItem._id);
+  const handleRemove = async () => {
+    try {
+      await removeCartItem(cartItem._id); // Call the removeCartItem service with the item's ID
+      if (onRemove) {
+        onRemove(cartItem._id); // Call the onRemove callback if provided
+      }
+    } catch (error) {
+      console.error("Error removing item from cart:", error);
+    }
+  };
  
   // const filterBooks = cartItem.filter((item) => item.length > 0);
   
@@ -42,8 +53,9 @@ export default function CartItem(props) {
                 color: "#9D9D9D",
                 marginTop: 2,
                 marginBottom: 1,
+                marginRight:'12vw'
               }}
-            >{cartItem.product_id.author}</Typography>
+            >by {cartItem.product_id.author}</Typography>
 
             <Typography
               variant="body1"
@@ -95,15 +107,22 @@ export default function CartItem(props) {
               flexWrap: "nowrap",
             }}
           >
-            <QuantityNo cartItem={cartItem} id={cartItem._id} />
+            {!isOrderSummary && (
+        <Box sx={{ margin: '10px' }}>
+          <QuantityNo cartItem={cartItem} id={cartItem._id} />
+        </Box>
+      )}
+            {/* <QuantityNo cartItem={cartItem} id={cartItem._id} /> */}
+            {!isOrderSummary && (
             <Typography
               variant="body1"
               color="initial"
               sx={{ mx: { xs: 1, sm: 2 }, cursor: "pointer" }}
+              onClick={handleRemove}
             >
               Remove
               </Typography>
-              
+              )}
           </Box>
         </Box>
         </Box>

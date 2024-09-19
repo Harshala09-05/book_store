@@ -21,6 +21,7 @@ function BookDetails() {
   const { id } = useParams();
 
   const [booksDetails, setbooksDetails] = useState();
+  
 
   useEffect(() => {
     fetchbooksDetails();
@@ -37,8 +38,16 @@ function BookDetails() {
   const [cartItem, setCartItem] = useState();
   const [addCart, setAddCart] = useState();
 
+
   const addToCart = async () => {
     const cartItemResponse = await addCartItem(id);
+    setCartItem((prevState) => ({
+      ...prevState,
+      [id]: {
+        ...cartItemResponse.data,
+        quantityToBuy: 1 // Set the initial quantity to 1
+      }
+    }));
     setCartItem({
       ...cartItemResponse.data,
       quantityToBuy: 1 // Set the initial quantity to 1
@@ -47,6 +56,7 @@ function BookDetails() {
     setAddCart(true); // Set to true to show the QuantityNo component
     getCartItems()
   };
+
   
 
   return (
@@ -55,7 +65,7 @@ function BookDetails() {
       <Box>
         <Box sx={{ height: "8vh", marginLeft: "13vw", paddingTop: "3vh" }}>
           <Breadcrumbs aria-label="breadcrumb">
-            <Link underline="hover" color="inherit" href="">
+            <Link  underline="hover" color="inherit" href="/dashboard">
               Home
             </Link>
             <Typography sx={{ color: "text.primary" }}>booksDetails</Typography>
@@ -125,7 +135,7 @@ function BookDetails() {
                     getCartItems={getCartItems}
                     setCartItem={setCartItem}
                     id={id}
-                    // fetchbooksDetails={fetchbooksDetails}
+                    fetchbooksDetails={fetchbooksDetails}
                     // quantityToBuy ={quantityToBuy}
                   />
                 </Box>
