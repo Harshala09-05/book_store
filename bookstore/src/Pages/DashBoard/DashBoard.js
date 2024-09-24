@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Box, Typography, Select, MenuItem } from "@mui/material";
+import { Box, Typography, Select, MenuItem, CircularProgress } from "@mui/material";
 import BookCard from "../../Component/BookCard";
 import NavBar from "../../Component/NavBar";
 import { getBooks, getCartItems } from "../../Services/admin_service";
@@ -8,9 +8,11 @@ import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 const Dashboard = () => {
   const [books, setBooks] = useState([]);
   const [filteredBooks, setFilteredBooks] = useState([]);
-  const [cartItems, setCartItems] = useState();
+  const [cartItems, setCartItems] = useState([]);
   const [searchBook, setSearchBook] = useState('');
-  const location = useLocation(); // To check the current route
+  const [loading, setLoading] = useState(true);
+  const [sortOrder, setSortOrder] = useState('relevance'); // New state for sort order
+  const location = useLocation();
   const navigate = useNavigate();
 
   const handleCardClick = (id) => {
@@ -18,18 +20,29 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
-    // Fetch books only when the user is on the /dashboard route
     if (location.pathname === '/dashboard') {
       getAllBooks();
     }
     getAllCartItems();
   }, [location.pathname]);
 
+  useEffect(() => {
+    // Apply sorting when books or sortOrder changes
+    applySorting();
+  }, [books, sortOrder]);
+
   const getAllBooks = async () => {
-    let response = await getBooks();
-    setBooks(response.data.result);
-    setFilteredBooks(response.data.result);
-    console.log("books--------------------->", response.data.result);
+    setLoading(true);
+    try {
+      let response = await getBooks();
+      setBooks(response.data.result);
+      setFilteredBooks(response.data.result);
+      console.log("books--------------------->", response.data.result);
+    } catch (error) {
+      console.log('error fetching', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const getAllCartItems = async () => {
@@ -37,36 +50,35 @@ const Dashboard = () => {
     console.log("cartItems in dashboard", response.data.result);
     setCartItems(response.data.result);
   };
+
   const handleSearch = (searchBook) => {
-    let filtered;
     setSearchBook(searchBook);
     if (searchBook === '') {
-      // setFilteredBooks(books);
-      getAllBooks()
-      console.log(books);
+      getAllBooks();
     } else {
       const filtered = books?.filter((book) =>
-        
-        book.bookName?.toLowerCase().includes(searchBook.toLowerCase()));
-    
-      // setFilteredBooks(filtered);
+        book.bookName?.toLowerCase().includes(searchBook.toLowerCase())
+      );
       setBooks(filtered);
-      console.log(filtered);
     }
-  }
-    // }
-    // if (searchBook !== '') {
-    //   let filtered = books.filter(book =>
-    //     book.bookName.toLowerCase().includes(searchBook.toLowerCase()) ||
-    //     book.author.toLowerCase().includes(searchBook.toLowerCase())
-    //   );
-    // }
+  };
 
-    // Update state with the filtered notes
-  //   setFilteredBooks(filtered);
-  //   console.log("Data", filtered);
-  // }
+  const handleSortChange = (event) => {
+    setSortOrder(event.target.value);
+  };
 
+  const applySorting = () => {
+    let sortedBooks = [...books];
+    if (sortOrder === 'relevance') {
+      // Default order or any other relevance logic
+      sortedBooks.sort((a, b) => a.bookName.localeCompare(b.bookName));
+    } else if (sortOrder === 'priceLowToHigh') {
+      sortedBooks.sort((a, b) => a.price - b.price);
+    } else if (sortOrder === 'priceHighToLow') {
+      sortedBooks.sort((a, b) => b.price - a.price);
+    }
+    setFilteredBooks(sortedBooks);
+  };
 
   return (
     <>
@@ -74,8 +86,6 @@ const Dashboard = () => {
       <div>
         <Box sx={{ width: '100%', alignItems: 'center', justifyContent: 'center' }}>
           <Box sx={{ width: '100%', alignItems: 'center', justifyContent: 'center' }}>
-            
-            {/* Conditionally render books only on /dashboard */}
             {location.pathname === '/dashboard' && (
               <>
                 <Box
@@ -92,50 +102,56 @@ const Dashboard = () => {
                   >
                     Books
                     <Typography variant="body1" sx={{ fontSize: 12, color: '#9D9D9D', marginLeft: 1 }}>
-                      ({books.length} items)
+                      ({filteredBooks.length} items)
                     </Typography>
                   </Typography>
 
                   <Select
-                    value="relevance"
+                    value={sortOrder}
+                    onChange={handleSortChange}
                     displayEmpty
                     sx={{ marginBottom: "20px", width: { xs: "100%", md: "200px" }, height: '25px' }}
                   >
                     <MenuItem value="relevance">Sort by relevance</MenuItem>
-                    <MenuItem value="price">Price: Low to High</MenuItem>
-                    <MenuItem value="price">Price: High to Low</MenuItem>
+                    <MenuItem value="priceLowToHigh">Price: Low to High</MenuItem>
+                    <MenuItem value="priceHighToLow">Price: High to Low</MenuItem>
                   </Select>
                 </Box>
 
                 <Box sx={{
-                   marginLeft: { xs: 0, md: "5vw" }, // No margin on small screens
-                   display: "grid",
-                   gridTemplateColumns: {
-                     xs: "repeat(1, 1fr)", // 1 card per row on mobile
-                     sm: "repeat(2, 1fr)", // 2 cards per row on tablet
-                     md: "repeat(4, 1fr)", // 4 cards per row on larger screens
-                   },
-                   gap: 2,
-                   padding: { xs: 1, md: 2 }, // Padding for mobile and desktop
+                  marginLeft: { xs: 0, md: "5vw" },
+                  display: "grid",
+                  gridTemplateColumns: {
+                    xs: "repeat(1, 1fr)",
+                    sm: "repeat(2, 1fr)",
+                    md: "repeat(4, 1fr)",
+                  },
+                  gap: 2,
+                  padding: { xs: 1, md: 2 },
                 }}>
-                  {books.length > 0 ? (
-                    books.map((book) => (
-                      <BookCard
-                        key={book.id}
-                        handleCardClick={handleCardClick}
-                        books={book}
-                        setBooks={setBooks}
-                        getAllBooks={getAllBooks}
-                      />
-                    ))
+                  {loading ? (
+                    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+                      <CircularProgress />
+                    </Box>
                   ) : (
-                    <Typography>No books available</Typography>
+                    filteredBooks.length > 0 ? (
+                      filteredBooks.map((book) => (
+                        <BookCard
+                          key={book.id}
+                          handleCardClick={handleCardClick}
+                          books={book}
+                          setBooks={setBooks}
+                          getAllBooks={getAllBooks}
+                        />
+                      ))
+                    ) : (
+                      <Typography>No books available</Typography>
+                    )
                   )}
                 </Box>
               </>
             )}
 
-            {/* This renders the nested routes like BookDetails */}
             <Outlet />
           </Box>
         </Box>

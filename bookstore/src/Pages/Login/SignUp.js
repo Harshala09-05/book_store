@@ -107,7 +107,7 @@ export default function SignUp() {
 
   return (
       <div>
-          <Box display='flex' flexDirection='column'boxShadow={3} justifyContent='center' alignItems='center' >
+          <Box display='flex' flexDirection='column'boxShadow={3} justifyContent='center' alignItems='center'   >
               {/* <Box display='flex' justifyContent='space-between' width='15vw'  marginTop={5} marginBottom={1}>
                   <Typography variant='h5' color={'textSecondary'}>Login</Typography>
                   <Typography variant='h5' fontWeight={'bold'}>SignUp</Typography>

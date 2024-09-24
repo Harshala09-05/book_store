@@ -26,7 +26,7 @@ export default function Router() {
                 </Route>
                 <Route path='/successful' element={<OrderSuccessful/>}/>
 
-                  {/* <Route path="/dashboard" element={<DashBoard />}>sss
+                  {/* <Route path="/dashboard" element={<DashBoard />}>
                       </Route> */}
                    
                

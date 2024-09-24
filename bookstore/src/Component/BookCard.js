@@ -42,27 +42,27 @@ export default function BookCard({ books, setBooks, getAllBooks,handleCardClick 
           }}
         />
         <CardContent >
-          <Typography variant="body1" component="div" sx={{display:'flex',alignItems:'flex-start'}}>
+          <Typography variant="body1" component="div" sx={{display:'flex',alignItems:'flex-start',fontWeight:'bold'}}>
             {books.bookName}
           </Typography>
-          <Typography variant="body2" sx={{ color: 'text.secondary',display:'flex',alignItems:'flex-start' }}>
+          <Typography variant="body2" sx={{ color: 'text.secondary',display:'flex',alignItems:'flex-start',fontSize: { xs: '10px', md: '12px' } }}>
             by {books.author}
           </Typography >
           {/* <Rating value='4.5' readOnly /> */}
           <Typography variant="span" color="text.secondary" component="div" sx={{display:'flex',alignItems:'flex-start',marginBottom:'5px'}}>
-                    <span className='rating' style={{ backgroundColor: 'green',color:'white' }} >
+            <span className='rating' style={{ backgroundColor: 'green', color: 'white', fontSize: { xs: '5px', md: '7px' } }} >
                         4.5
                         <StarIcon fontSize='sm'/>
                     </span>
-                    <span className='rating-number'>
+                    <span className='rating-number' fontSize={{ xs: '5px', md: '7px' }} color="text.secondary">
                         (20)
                     </span>
                 </Typography>
 
           <Typography variant="h6" component="div" sx={{fontWeight:'bold',
                            fontSize: { xs: '12px', md: '14px' },display:'flex',alignItems:'flex-start'}}>
-            Rs.{books.discountPrice}
-            <span style={{ textDecoration: 'line-through', fontSize: { xs: '10px', md: '12px' } }}>Rs.{books.price}</span>
+            Rs. {books.discountPrice}
+            <span color="text.secondary" style={{ textDecoration: 'line-through', fontSize: { xs: '10px', md: '12px' } ,marginLeft:'5px'}}>Rs.{books.price}</span>
           </Typography>
         </CardContent>
         

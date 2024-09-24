@@ -146,6 +146,7 @@ function BookDetails() {
                   flexGrow: 1,
                   marginRight: "20px",
                   backgroundColor: "Black",
+                  width: "8vw"
                   // "&:hover": { backgroundColor: "#A03037" },
                 }}
               >

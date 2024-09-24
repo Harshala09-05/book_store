@@ -1,5 +1,5 @@
-import React, { useState,createContext } from 'react';
-import { Box, IconButton, TextField } from "@mui/material";
+import React, { useState,createContext, useEffect } from 'react';
+import { Box, IconButton, TextField,Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import { modifyCartItem, removeCartItem } from "../Services/admin_service";
@@ -15,7 +15,19 @@ export default function QuantityNo(props) {
     const { cartCount, setCartCount, updateCartCount } = createContext(DataContext);
 
     const dispatch = useDispatch()
-
+  const [errorMessage, setErrorMessage] = useState('');
+  // const cartQuantity = cartItem?.find(item => item.product_id.quantity === availableStock);
+  // console.log(cartQuantity)
+  const availableStock = item?.product_id?.quantity || 0;
+  console.log(item?.product_id?.quantity);
+    useEffect(() => {
+      if (!item.quantityToBuy) {
+        setItem((prev) => ({
+          ...prev,
+          quantityToBuy: 1, // Default value if not already set
+        }));
+      }
+    }, []);
   const handleCount = async (type) => {
       try {
         console.log("cartItem :", cartItem);
@@ -29,15 +41,23 @@ export default function QuantityNo(props) {
        debugger
         if (type === "plus") {
           console.log(type, item.quantityToBuy);
+          if (item.quantityToBuy >= availableStock) {
+            setErrorMessage('Order is out of stock!');
+            return;
+          }
           const updatedQuantity = item.quantityToBuy + 1;
           setItem((prev) => ({
             ...prev,
             quantityToBuy: updatedQuantity,
           }));
+
           console.log(updatedQuantity, item);
+
           await modifyCartItem(id, { quantityToBuy: updatedQuantity });
           fetchbooksDetails(); // Fetch the book details after modifying the car
           dispatch(addToCart(item, id));
+
+          setErrorMessage('');
 
         } else if (type === "minus") {
           console.log(type, item.quantityToBuy);
@@ -59,7 +79,7 @@ export default function QuantityNo(props) {
           
             await modifyCartItem(id, { quantityToBuy: updatedQuantity }); // API call to update the quantity in the backend
             dispatch(removeFromCart(id))
-            getCartItems(); // Refresh the cart items after modifying the quantity
+            // getCartItems(); // Refresh the cart items after modifying the quantity
           }
         }
         
@@ -72,6 +92,7 @@ export default function QuantityNo(props) {
 
   
   return (
+    <Box>
     <Box sx={{ display: 'flex', alignItems: 'center' }}>
       <IconButton
         size="small"
@@ -94,12 +115,18 @@ export default function QuantityNo(props) {
       />
       <IconButton
         size="small"
-        sx={{ backgroundColor: "#FAFAFA", border: "1px solid #DBDBDB" }}
+        sx={{ backgroundColor: "#FAFAFA", border: "1px solid #DBDBDB" ,marginRight:1}}
         onClick={() => handleCount("plus")}
-        disabled={item.quantityToBuy >= 10 && location.pathname.includes('cart')}
+        disabled={item.quantityToBuy <= availableStock || location.pathname.includes('cart')}
       >
         <AddIcon fontSize="small" />
       </IconButton>
     </Box>
+     {errorMessage && (
+      <Typography variant="caption" color="error" sx={{ mt: 1 }}>
+        {errorMessage}
+      </Typography>
+      )}
+  </Box>
   );
 }
