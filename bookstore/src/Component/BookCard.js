@@ -28,7 +28,7 @@ export default function BookCard({ books, setBooks, getAllBooks,handleCardClick 
   
     return (
       <Card onClick={() => handleCardClick(books._id)} sx={{
-        marginLeft: '2vw', width: { xs: '80vw', sm: '40vw', md: '20vw', lg: '15vw' }, // Responsive width for different screens
+        marginLeft: {lg:'2vw',xs:'8vw'}, width: { xs: '80vw', sm: '40vw', md: '20vw', lg: '15vw' }, // Responsive width for different screens
         height: { xs: 'auto', sm: '45vh', md: '40vh' }, // Adjust height based on screen size,
         marginTop: '10vh'
       }}>

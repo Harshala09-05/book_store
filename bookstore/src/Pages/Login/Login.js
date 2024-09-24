@@ -69,9 +69,9 @@ export default function Login() {
       alignItems="center"
       p={3}
       boxShadow={3}
-      bgcolor='pink'
+      // bgcolor='pink'
       sx={{
-        width: { xs: '90vw', sm: 'auto' }, // Adjust width for mobile view
+        width: { xs: '73vw', sm: 'auto' }, // Adjust width for mobile view
         padding: { xs: 2, sm: 3 }, // Adjust padding for mobile view
       }}
     >
